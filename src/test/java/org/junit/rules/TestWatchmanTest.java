@@ -1,6 +1,6 @@
 package org.junit.rules;
 
-import static junit.framework.Assert.fail;
+import static org.junit.Assert.fail;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assume.assumeTrue;

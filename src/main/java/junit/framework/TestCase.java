@@ -3,6 +3,7 @@ package junit.framework;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import org.junit.Assert;
 
 /**
  * A test case defines the fixture to run multiple tests. To define a test case<br/>

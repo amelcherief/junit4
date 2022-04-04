@@ -1,5 +1,7 @@
 package junit.framework;
 
+import org.junit.Assert;
+
 public class ComparisonCompactor {
 
     private static final String ELLIPSIS = "...";

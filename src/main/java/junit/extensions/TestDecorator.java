@@ -1,6 +1,6 @@
 package junit.extensions;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import junit.framework.Test;
 import junit.framework.TestResult;
 

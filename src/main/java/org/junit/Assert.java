@@ -812,7 +812,7 @@ public class Assert {
         assertNotSame(null, unexpected, actual);
     }
 
-    private static void failSame(String message) {
+    protected static void failSame(String message) {
         String formatted = "";
         if (message != null) {
             formatted = message + " ";
@@ -820,7 +820,7 @@ public class Assert {
         fail(formatted + "expected not same");
     }
 
-    private static void failNotSame(String message, Object expected,
+    protected static void failNotSame(String message, Object expected,
             Object actual) {
         String formatted = "";
         if (message != null) {
@@ -830,12 +830,12 @@ public class Assert {
                 + ">");
     }
 
-    private static void failNotEquals(String message, Object expected,
+    protected static void failNotEquals(String message, Object expected,
             Object actual) {
         fail(format(message, expected, actual));
     }
 
-    static String format(String message, Object expected, Object actual) {
+    public static String format(String message, Object expected, Object actual) {
         String formatted = "";
         if (message != null && !"".equals(message)) {
             formatted = message + " ";
