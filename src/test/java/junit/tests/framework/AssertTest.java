@@ -3,6 +3,7 @@ package junit.tests.framework;
 import junit.framework.AssertionFailedError;
 import junit.framework.ComparisonFailure;
 import junit.framework.TestCase;
+import org.junit.Assert;
 
 public class AssertTest extends TestCase {
 
@@ -55,6 +56,7 @@ public class AssertTest extends TestCase {
         assertEquals(o, o);
         try {
             assertEquals(new Object(), new Object());
+            Assert.fail();
         } catch (AssertionFailedError e) {
             return;
         }
@@ -72,8 +74,10 @@ public class AssertTest extends TestCase {
     public void testAssertNullNotEqualsString() {
         try {
             assertEquals(null, "foo");
+            Assert.fail("ComparisonFailure Expected");
             fail();
         } catch (ComparisonFailure e) {
+            e.printStackTrace();
         }
     }
 
@@ -100,6 +104,7 @@ public class AssertTest extends TestCase {
         assertNull(null);
         try {
             assertNull(new Object());
+            Assert.fail("AssertionFailedError expected");
         } catch (AssertionFailedError e) {
             return;
         }
@@ -110,6 +115,7 @@ public class AssertTest extends TestCase {
         assertNotNull(new Object());
         try {
             assertNotNull(null);
+            Assert.fail("AssertionFailedError expected");
         } catch (AssertionFailedError e) {
             return;
         }
