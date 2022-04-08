@@ -78,6 +78,7 @@ public class MethodRoadie {
                     addFailure(new TestTimedOutException(timeout, TimeUnit.MILLISECONDS));
                 } catch (Exception e) {
                     addFailure(e);
+                    Thread.currentThread().interrupt();
                 }
             }
         });
