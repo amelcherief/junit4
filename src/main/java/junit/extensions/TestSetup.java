@@ -27,10 +27,11 @@ public class TestSetup extends TestDecorator {
         result.runProtected(this, p);
     }
 
+    
     /**
      * Sets up the fixture. Override to set up additional fixture state.
      */
-    protected void setUp() throws Exception {
+    protected void setUp() throws Exception{
     }
 
     /**
@@ -38,5 +39,6 @@ public class TestSetup extends TestDecorator {
      * state.
      */
     protected void tearDown() throws Exception {
+        
     }
 }
