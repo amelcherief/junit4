@@ -12,7 +12,6 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 import org.junit.samples.AllSamplesTests;
 import org.junit.tests.assertion.AllAssertionTests;
-import org.junit.tests.deprecated.AllDeprecatedTests;
 import org.junit.tests.description.AllDescriptionTests;
 import org.junit.tests.experimental.AllExperimentalTests;
 import org.junit.tests.junit3compatibility.AllJUnit3CompatibilityTests;
@@ -25,7 +24,6 @@ import org.junit.validator.AllValidatorTests;
 @RunWith(Suite.class)
 @SuiteClasses({
         AllAssertionTests.class,
-        AllDeprecatedTests.class,
         AllDescriptionTests.class,
         AllExperimentalTests.class,
         AllInternalTests.class,

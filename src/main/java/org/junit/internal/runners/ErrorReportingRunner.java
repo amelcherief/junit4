@@ -72,10 +72,6 @@ public class ErrorReportingRunner extends Runner {
         if (cause instanceof InitializationError) {
             return ((InitializationError) cause).getCauses();
         }
-        if (cause instanceof org.junit.internal.runners.InitializationError) {
-            return ((org.junit.internal.runners.InitializationError) cause)
-                    .getCauses();
-        }
         return singletonList(cause);
     }
 

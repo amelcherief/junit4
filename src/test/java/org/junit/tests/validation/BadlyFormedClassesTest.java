@@ -6,13 +6,10 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.internal.runners.JUnit4ClassRunner;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
-import org.junit.runner.RunWith;
 import org.junit.runner.notification.Failure;
 
-@SuppressWarnings("deprecation")
 public class BadlyFormedClassesTest {
     public static class FaultyConstructor {
         public FaultyConstructor() throws Exception {
@@ -28,7 +25,6 @@ public class BadlyFormedClassesTest {
         }
     }
 
-    @RunWith(JUnit4ClassRunner.class)
     public static class BadBeforeMethodWithLegacyRunner {
         @Before
         void before() {
