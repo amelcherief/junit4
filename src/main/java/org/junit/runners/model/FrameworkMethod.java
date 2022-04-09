@@ -18,6 +18,7 @@ import org.junit.internal.runners.model.ReflectiveCallable;
  */
 public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     private final Method method;
+    private static final String METHOD = "Method";
 
     /**
      * Returns a new {@code FrameworkMethod} for {@code method}
@@ -83,7 +84,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     public void validatePublicVoidNoArg(boolean isStatic, List<Throwable> errors) {
         validatePublicVoid(isStatic, errors);
         if (method.getParameterTypes().length != 0) {
-            errors.add(new Exception("Method " + method.getName() + " should have no parameters"));
+            errors.add(new Exception(METHOD + method.getName() + " should have no parameters"));
         }
     }
 
@@ -100,13 +101,13 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     public void validatePublicVoid(boolean isStatic, List<Throwable> errors) {
         if (isStatic() != isStatic) {
             String state = isStatic ? "should" : "should not";
-            errors.add(new Exception("Method " + method.getName() + "() " + state + " be static"));
+            errors.add(new Exception(METHOD + method.getName() + "() " + state + " be static"));
         }
         if (!isPublic()) {
-            errors.add(new Exception("Method " + method.getName() + "() should be public"));
+            errors.add(new Exception(METHOD + method.getName() + "() should be public"));
         }
         if (method.getReturnType() != Void.TYPE) {
-            errors.add(new Exception("Method " + method.getName() + "() should be void"));
+            errors.add(new Exception(METHOD + method.getName() + "() should be void"));
         }
     }
 

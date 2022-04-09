@@ -88,7 +88,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      * Constructs a new {@code ParentRunner} that will run {@code @TestClass}
      */
     protected ParentRunner(Class<?> testClass) throws InitializationError {
-        this.testClass = createTestClass(testClass);
+        this.testClass = new TestClass(testClass);
         validate();
     }
 
@@ -100,15 +100,6 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     protected ParentRunner(TestClass testClass) throws InitializationError {
        this.testClass = notNull(testClass);
        validate();
-    }
-
-    /**
-     * @deprecated Please use {@link #ParentRunner(org.junit.runners.model.TestClass)}.
-     * @since 4.12
-     */
-    @Deprecated
-    protected TestClass createTestClass(Class<?> testClass) {
-        return new TestClass(testClass);
     }
 
     //

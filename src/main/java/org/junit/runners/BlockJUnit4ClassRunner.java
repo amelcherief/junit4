@@ -298,7 +298,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         Statement statement = methodInvoker(method, test);
         statement = possiblyExpectingExceptions(method, statement);
         statement = withBefores( test, statement);
-        statement = withAfters(method, test, statement);
+        statement = withAfters( test, statement);
         statement = withRules(method, test, statement);
         statement = withInterruptIsolation(statement);
         return statement;
@@ -348,7 +348,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * are combined, if necessary, with exceptions from After methods into a
      * {@link MultipleFailureException}.
      */
-    protected Statement withAfters(FrameworkMethod method, Object target,
+    protected Statement withAfters( Object target,
             Statement statement) {
         List<FrameworkMethod> afters = getTestClass().getAnnotatedMethods(
                 After.class);
