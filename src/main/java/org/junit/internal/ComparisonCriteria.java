@@ -27,6 +27,36 @@ public abstract class ComparisonCriteria {
             throws ArrayComparisonFailure {
         arrayEquals(message, expecteds, actuals, true);
     }
+    
+    private void manageArray(Object expected, Object actual, String message, String header, int i) {
+        if (isArray(expected) && isArray(actual)) {
+            try {
+                arrayEquals(message, expected, actual, false);
+            } catch (ArrayComparisonFailure e) {
+                e.addDimension(i);
+                throw e;
+            } catch (AssertionError e) {
+                // Array lengths differed.
+                throw new ArrayComparisonFailure(header, e, i);
+            }
+        } else {
+            try {
+                assertElementsEqual(expected, actual);
+            } catch (AssertionError e) {
+                throw new ArrayComparisonFailure(header, e, i);
+            }
+        }
+    }
+    
+    private void expectedDiffActual(String header, Object expecteds, Object actuals, int expectedsLength, int actualsLength, int prefixLength) {
+        Object expected = getToStringableArrayElement(expecteds, expectedsLength, prefixLength);
+        Object actual = getToStringableArrayElement(actuals, actualsLength, prefixLength);
+        try {
+            Assert.assertEquals(expected, actual);
+        } catch (AssertionError e) {
+            throw new ArrayComparisonFailure(header, e, prefixLength);
+        }
+    }
 
     private void arrayEquals(String message, Object expecteds, Object actuals, boolean outer)
             throws ArrayComparisonFailure {
@@ -61,33 +91,11 @@ public abstract class ComparisonCriteria {
             Object expected = Array.get(expecteds, i);
             Object actual = Array.get(actuals, i);
 
-            if (isArray(expected) && isArray(actual)) {
-                try {
-                    arrayEquals(message, expected, actual, false);
-                } catch (ArrayComparisonFailure e) {
-                    e.addDimension(i);
-                    throw e;
-                } catch (AssertionError e) {
-                    // Array lengths differed.
-                    throw new ArrayComparisonFailure(header, e, i);
-                }
-            } else {
-                try {
-                    assertElementsEqual(expected, actual);
-                } catch (AssertionError e) {
-                    throw new ArrayComparisonFailure(header, e, i);
-                }
-            }
+            manageArray(expected, actual, message, header, i);
         }
 
         if (actualsLength != expectedsLength) {
-            Object expected = getToStringableArrayElement(expecteds, expectedsLength, prefixLength);
-            Object actual = getToStringableArrayElement(actuals, actualsLength, prefixLength);
-            try {
-                Assert.assertEquals(expected, actual);
-            } catch (AssertionError e) {
-                throw new ArrayComparisonFailure(header, e, prefixLength);
-            }
+            expectedDiffActual(header, expecteds, actuals, expectedsLength, actualsLength, prefixLength);
         }
     }
 
