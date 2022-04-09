@@ -3,8 +3,6 @@ package org.junit.runner;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.ObjectStreamClass;
-import java.io.ObjectStreamField;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,8 +22,6 @@ import org.junit.runner.notification.RunListener;
  */
 public class Result implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static final ObjectStreamField[] serialPersistentFields =
-            ObjectStreamClass.lookup(SerializedForm.class).getFields();
     private final AtomicInteger count;
     private final AtomicInteger ignoreCount;
     private final AtomicInteger assumptionFailureCount;
@@ -111,8 +107,8 @@ public class Result implements Serializable {
     }
 
     private void writeObject(ObjectOutputStream s) throws IOException {
-        SerializedForm serializedForm = new SerializedForm(this);
-        serializedForm.serialize(s);
+        SerializedForm serializedForm1 = new SerializedForm(this);
+        serializedForm1.serialize(s);
     }
 
     private void readObject(ObjectInputStream s)

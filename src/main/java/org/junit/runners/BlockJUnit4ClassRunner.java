@@ -61,7 +61,7 @@ import org.junit.validator.TestClassValidator;
  * @since 4.5
  */
 public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
-    private static TestClassValidator PUBLIC_CLASS_VALIDATOR = new PublicClassValidator();
+    private static TestClassValidator publicClassValidator = new PublicClassValidator();
 
     private final ConcurrentMap<FrameworkMethod, Description> methodDescriptions = new ConcurrentHashMap<FrameworkMethod, Description>();
 
@@ -151,14 +151,13 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         validatePublicConstructor(errors);
         validateNoNonStaticInnerClass(errors);
         validateConstructor(errors);
-        validateInstanceMethods(errors);
         validateFields(errors);
         validateMethods(errors);
     }
 
     private void validatePublicConstructor(List<Throwable> errors) {
         if (getTestClass().getJavaClass() != null) {
-            errors.addAll(PUBLIC_CLASS_VALIDATOR.validateTestClass(getTestClass()));
+            errors.addAll(publicClassValidator.validateTestClass(getTestClass()));
         }
     }
 
@@ -206,23 +205,6 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
 
     private boolean hasOneConstructor() {
         return getTestClass().getJavaClass().getConstructors().length == 1;
-    }
-
-    /**
-     * Adds to {@code errors} for each method annotated with {@code @Test},
-     * {@code @Before}, or {@code @After} that is not a public, void instance
-     * method with no arguments.
-     * @deprecated
-     */
-    @Deprecated
-    protected void validateInstanceMethods(List<Throwable> errors) {
-        validatePublicVoidNoArgMethods(After.class, false, errors);
-        validatePublicVoidNoArgMethods(Before.class, false, errors);
-        validateTestMethods(errors);
-
-        if (computeTestMethods().isEmpty()) {
-            errors.add(new Exception("No runnable methods"));
-        }
     }
 
     protected void validateFields(List<Throwable> errors) {
@@ -314,9 +296,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         }
 
         Statement statement = methodInvoker(method, test);
-        statement = possiblyExpectingExceptions(method, test, statement);
-        statement = withPotentialTimeout(method, test, statement);
-        statement = withBefores(method, test, statement);
+        statement = possiblyExpectingExceptions(method, statement);
+        statement = withBefores( test, statement);
         statement = withAfters(method, test, statement);
         statement = withRules(method, test, statement);
         statement = withInterruptIsolation(statement);
@@ -341,36 +322,18 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * otherwise.
      */
     protected Statement possiblyExpectingExceptions(FrameworkMethod method,
-            Object test, Statement next) {
+             Statement next) {
         Test annotation = method.getAnnotation(Test.class);
         Class<? extends Throwable> expectedExceptionClass = getExpectedException(annotation);
         return expectedExceptionClass != null ? new ExpectException(next, expectedExceptionClass) : next;
     }
 
     /**
-     * Returns a {@link Statement}: if {@code method}'s {@code @Test} annotation
-     * has the {@code timeout} attribute, throw an exception if {@code next}
-     * takes more than the specified number of milliseconds.
-     * @deprecated
-     */
-    @Deprecated
-    protected Statement withPotentialTimeout(FrameworkMethod method,
-            Object test, Statement next) {
-        long timeout = getTimeout(method.getAnnotation(Test.class));
-        if (timeout <= 0) {
-            return next;
-        }
-        return FailOnTimeout.builder()
-               .withTimeout(timeout, TimeUnit.MILLISECONDS)
-               .build(next);
-    }
-
-    /**
      * Returns a {@link Statement}: run all non-overridden {@code @Before}
-     * methods on this class and superclasses before running {@code next}; if
+     * methods on this class and super-classes before running {@code next}; if
      * any throws an Exception, stop execution and pass the exception on.
      */
-    protected Statement withBefores(FrameworkMethod method, Object target,
+    protected Statement withBefores( Object target,
             Statement statement) {
         List<FrameworkMethod> befores = getTestClass().getAnnotatedMethods(
                 Before.class);
