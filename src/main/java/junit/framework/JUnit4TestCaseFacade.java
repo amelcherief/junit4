@@ -19,7 +19,7 @@ public class JUnit4TestCaseFacade implements Test, Describable {
         return 1;
     }
 
-    public void run(TestResult result) {
+    public void run(TestResult result){
         throw new RuntimeException(
                 "This test stub created only for informational purposes.");
     }

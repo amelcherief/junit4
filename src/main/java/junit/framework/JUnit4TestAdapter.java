@@ -47,7 +47,7 @@ public class JUnit4TestAdapter implements Test, Filterable, Orderable, Describab
     }
 
     public void run(TestResult result) {
-        fRunner.run(fCache.getNotifier(result, this));
+        fRunner.run(fCache.getNotifier(result));
     }
 
     // reflective interface for Eclipse

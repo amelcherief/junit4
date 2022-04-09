@@ -85,14 +85,14 @@ public abstract class TestCase extends Assert implements Test {
      * No-arg constructor to enable serialization. This method
      * is not intended to be used by mere mortals without calling setName().
      */
-    public TestCase() {
+    protected TestCase() {
         fName = null;
     }
 
     /**
      * Constructs a test case with the given name.
      */
-    public TestCase(String name) {
+    protected TestCase(String name) {
         fName = name;
     }
 
@@ -133,21 +133,22 @@ public abstract class TestCase extends Assert implements Test {
 
     /**
      * Runs the bare test sequence.
+     * @throws Exception 
      *
      * @throws Throwable if any exception is thrown
      */
-    public void runBare() throws Throwable {
-        Throwable exception = null;
+    public void runBare() throws ThrowException{
+        ThrowException exception = null;
         setUp();
         try {
             runTest();
         } catch (Throwable running) {
-            exception = running;
+            exception = (ThrowException) running;
         } finally {
             try {
                 tearDown();
             } catch (Throwable tearingDown) {
-                if (exception == null) exception = tearingDown;
+                if (exception == null) exception = (ThrowException) tearingDown;
             }
         }
         if (exception != null) throw exception;
@@ -159,7 +160,7 @@ public abstract class TestCase extends Assert implements Test {
      * @throws Throwable if any exception is thrown
      */
     protected void runTest() throws Throwable {
-        assertNotNull("TestCase.fName cannot be null", fName); // Some VMs crash when calling getMethod(null,null);
+        assertNotNull("TestCase.fName cannot be null", fName); 
         Method runMethod = null;
         try {
             // use getMethod to get all public inherited
@@ -474,14 +475,14 @@ public abstract class TestCase extends Assert implements Test {
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      */
-    protected void setUp() throws Exception {
+    protected void setUp() {
     }
 
     /**
      * Tears down the fixture, for example, close a network connection.
      * This method is called after a test is executed.
      */
-    protected void tearDown() throws Exception {
+    protected void tearDown(){
     }
 
     /**
