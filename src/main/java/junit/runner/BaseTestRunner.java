@@ -83,11 +83,17 @@ public abstract class BaseTestRunner implements TestListener {
 
     // TestRunListener implementation
 
-    public abstract void testStarted(String testName);
+    public void testStarted(String testName) {
+        // Do nothing because it's only used to print that the test started
+    }
 
-    public abstract void testEnded(String testName);
+    public void testEnded(String testName) {
+        // Do nothing because it's only used to print that the test ended
+    }
 
-    public abstract void testFailed(int status, Test test, Throwable e);
+    public void testFailed(int status, Test test, Throwable e) {
+        // Do nothing because it's only used to know the state of the test
+    }
 
     /**
      * Returns the Test corresponding to the given suite. This is

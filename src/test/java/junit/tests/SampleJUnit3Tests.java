@@ -17,7 +17,7 @@ public class SampleJUnit3Tests {
     public static class TestWithThrowingSetUpMethod extends TestCase {
 
         @Override
-        protected void setUp() throws Exception {
+        protected void setUp() {
             super.setUp();
             new FakeClassUnderTest().throwsExceptionWithoutCause();
         }

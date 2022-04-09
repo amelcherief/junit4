@@ -18,7 +18,7 @@ public interface TestListener {
      * A test ended.
      */
     public void endTest(Test test);
-
+    
     /**
      * A test started.
      */

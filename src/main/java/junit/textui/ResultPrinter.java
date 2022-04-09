@@ -121,6 +121,7 @@ public class ResultPrinter implements TestListener {
      * @see junit.framework.TestListener#endTest(Test)
      */
     public void endTest(Test test) {
+        System.out.println("The test ended");
     }
 
     /**

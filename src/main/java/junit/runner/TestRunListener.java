@@ -16,10 +16,4 @@ public interface TestRunListener {
     void testRunEnded(long elapsedTime);
 
     void testRunStopped(long elapsedTime);
-
-    void testStarted(String testName);
-
-    void testEnded(String testName);
-
-    void testFailed(int status, String testName, String trace);
 }

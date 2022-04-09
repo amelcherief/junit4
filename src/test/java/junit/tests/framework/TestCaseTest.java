@@ -155,7 +155,7 @@ public class TestCaseTest extends TestCase {
             }
 
             @Override
-            protected void tearDown() throws Exception {
+            protected void tearDown() {
                 throw new Error("Tearing down");
             }
         };
