@@ -34,16 +34,6 @@ public class MaxCore {
 
     /**
      * Create a new MaxCore from a serialized file stored at storedResults
-     *
-     * @deprecated use storedLocally()
-     */
-    @Deprecated
-    public static MaxCore forFolder(String folderName) {
-        return storedLocally(new File(folderName));
-    }
-
-    /**
-     * Create a new MaxCore from a serialized file stored at storedResults
      */
     public static MaxCore storedLocally(File storedResults) {
         return new MaxCore(storedResults);
@@ -133,7 +123,7 @@ public class MaxCore {
         }
         Class<?> type = each.getTestClass();
         if (type == null) {
-            throw new RuntimeException("Can't build a runner from description [" + each + "]");
+            throw new RunnerBuildException("Can't build a runner from description [" + each + "]");
         }
         String methodName = each.getMethodName();
         if (methodName == null) {
