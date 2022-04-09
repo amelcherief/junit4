@@ -147,7 +147,6 @@ public class Categories extends Suite {
             return new CategoryFilter(matchAnyInclusions, inclusions, matchAnyExclusions, exclusions);
         }
 
-        @Deprecated
         public CategoryFilter(Class<?> includedCategory, Class<?> excludedCategory) {
             includedAny = true;
             excludedAny = true;
@@ -215,6 +214,28 @@ public class Categories extends Suite {
 
             return false;
         }
+        
+        private boolean excludeTest(Set<Class<?>> childCategories) {
+            boolean b = false;
+            if (excludedAny) {
+                if (matchesAnyParentCategories(childCategories, excluded)) {
+                    b = false;
+                }
+            } else {
+                if (matchesAllParentCategories(childCategories, excluded)) {
+                    b = true;
+                }
+            }
+            return b;
+        }
+        
+        private boolean includeTest(Set<Class<?>> childCategories) {
+            if (includedAny) {
+                return matchesAnyParentCategories(childCategories, included);
+            } else {
+                return matchesAllParentCategories(childCategories, included);
+            }
+        }
 
         private boolean hasCorrectCategoryAnnotation(Description description) {
             final Set<Class<?>> childCategories= categories(description);
@@ -225,26 +246,14 @@ public class Categories extends Suite {
             }
 
             if (!excluded.isEmpty()) {
-                if (excludedAny) {
-                    if (matchesAnyParentCategories(childCategories, excluded)) {
-                        return false;
-                    }
-                } else {
-                    if (matchesAllParentCategories(childCategories, excluded)) {
-                        return false;
-                    }
-                }
+                return excludeTest(childCategories);
             }
 
             if (included.isEmpty()) {
                 // Couldn't be excluded, and with no suite's included categories treated as should run.
                 return true;
             } else {
-                if (includedAny) {
-                    return matchesAnyParentCategories(childCategories, included);
-                } else {
-                    return matchesAllParentCategories(childCategories, included);
-                }
+                return includeTest(childCategories);
             }
         }
 
