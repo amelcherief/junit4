@@ -2,6 +2,8 @@ package org.junit.experimental.theories;
 
 import java.util.List;
 
+import junit.framework.ThrowException;
+
 /**
  * Abstract parent class for suppliers of input data points for theories. Extend this class to customize how {@link
  * org.junit.experimental.theories.Theories Theories} runner
@@ -39,5 +41,5 @@ import java.util.List;
  * @see org.junit.experimental.theories.FromDataPoints
  */
 public abstract class ParameterSupplier {
-    public abstract List<PotentialAssignment> getValueSources(ParameterSignature sig) throws Throwable;
+    public abstract List<PotentialAssignment> getValueSources(ParameterSignature sig) throws ThrowException;
 }

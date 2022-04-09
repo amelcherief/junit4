@@ -73,11 +73,11 @@ public class Assignments {
 
     public List<PotentialAssignment> potentialsForNextUnassigned()
             throws Throwable {
-        ParameterSignature unassigned = nextUnassigned();
-        List<PotentialAssignment> assignments = getSupplier(unassigned).getValueSources(unassigned);
+        ParameterSignature unassign = nextUnassigned();
+        List<PotentialAssignment> assignments = getSupplier(unassign).getValueSources(unassign);
         
         if (assignments.isEmpty()) {
-            assignments = generateAssignmentsFromTypeAlone(unassigned);
+            assignments = generateAssignmentsFromTypeAlone(unassign);
         }
         
         return assignments;
@@ -138,11 +138,10 @@ public class Assignments {
     private int getConstructorParameterCount() {
         List<ParameterSignature> signatures = ParameterSignature
                 .signatures(clazz.getOnlyConstructor());
-        int constructorParameterCount = signatures.size();
-        return constructorParameterCount;
+        return signatures.size();
     }
 
-    public Object[] getArgumentStrings(boolean nullsOk)
+    public Object[] getArgumentStrings()
             throws CouldNotGenerateValueException {
         Object[] values = new Object[assigned.size()];
         for (int i = 0; i < values.length; i++) {

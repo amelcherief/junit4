@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import junit.framework.ThrowException;
 import org.junit.Assume;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.DataPoints;
@@ -62,7 +63,7 @@ public class AllMembersSupplier extends ParameterSupplier {
     }
 
     @Override
-    public List<PotentialAssignment> getValueSources(ParameterSignature sig) throws Throwable {
+    public List<PotentialAssignment> getValueSources(ParameterSignature sig) throws ThrowException {
         List<PotentialAssignment> list = new ArrayList<PotentialAssignment>();
 
         addSinglePointFields(sig, list);
@@ -73,7 +74,7 @@ public class AllMembersSupplier extends ParameterSupplier {
         return list;
     }
 
-    private void addMultiPointMethods(ParameterSignature sig, List<PotentialAssignment> list) throws Throwable {
+    private void addMultiPointMethods(ParameterSignature sig, List<PotentialAssignment> list) {
         for (FrameworkMethod dataPointsMethod : getDataPointsMethods(sig)) {
             Class<?> returnType = dataPointsMethod.getReturnType();
             
@@ -82,13 +83,8 @@ public class AllMembersSupplier extends ParameterSupplier {
                 try {
                     addDataPointsValues(returnType, sig, dataPointsMethod.getName(), list, 
                             dataPointsMethod.invokeExplosively(null));
-                } catch (Throwable throwable) {
-                    DataPoints annotation = dataPointsMethod.getAnnotation(DataPoints.class);
-                    if (annotation != null && isAssignableToAnyOf(annotation.ignoredExceptions(), throwable)) {
-                        return;
-                    } else {
-                        throw throwable;
-                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
                 }
             }
         }

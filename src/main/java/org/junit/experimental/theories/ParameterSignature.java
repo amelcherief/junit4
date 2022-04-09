@@ -34,7 +34,7 @@ public class ParameterSignature {
         map.put(b, a);
     }
     
-    public static ArrayList<ParameterSignature> signatures(Method method) {
+    public static List<ParameterSignature> signatures(Method method) {
         return signatures(method.getParameterTypes(), method
                 .getParameterAnnotations());
     }

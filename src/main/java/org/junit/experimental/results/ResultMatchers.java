@@ -16,14 +16,6 @@ import org.hamcrest.TypeSafeMatcher;
 public class ResultMatchers {
 
     /**
-     * Do not instantiate.
-     * @deprecated will be private soon.
-     */
-    @Deprecated
-    public ResultMatchers() {
-    }
-
-    /**
      * Matches if the tests are all successful
      */
     public static Matcher<PrintableResult> isSuccessful() {

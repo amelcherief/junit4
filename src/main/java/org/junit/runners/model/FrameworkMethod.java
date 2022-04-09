@@ -50,6 +50,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      * Returns the result of invoking this method on {@code target} with
      * parameters {@code params}. {@link InvocationTargetException}s thrown are
      * unwrapped, and their causes rethrown.
+     * @throws Throwable 
      */
     public Object invokeExplosively(final Object target, final Object... params)
             throws Throwable {
