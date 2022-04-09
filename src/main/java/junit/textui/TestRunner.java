@@ -165,7 +165,7 @@ public class TestRunner extends BaseTestRunner {
                 testCase = arg.substring(0, lastIndex);
                 method = arg.substring(lastIndex + 1);
             } else if (args[i].equals("-v")) {
-                System.err.println("JUnit " + Version.id() + " by Kent Beck and Erich Gamma");
+                System.err.println("JUnit " + Version.ID + " by Kent Beck and Erich Gamma");
             } else {
                 testCase = args[i];
             }

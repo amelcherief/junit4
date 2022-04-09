@@ -4,12 +4,12 @@ package junit.runner;
  * This class defines the current version of JUnit
  */
 public class Version {
-    private static final String ID = "4.13.3-SNAPSHOT";
+    public static final String ID = "4.13.3-SNAPSHOT";
     
 	private Version() {
 		// don't instantiate
 	}
-	
+
 	public static void main(String[] args) {
 		System.out.println(ID);
 	}

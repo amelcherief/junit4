@@ -67,7 +67,7 @@ public class JUnitCore {
      * @param args from main()
      */
     Result runMain(JUnitSystem system, String... args) {
-        system.out().println("JUnit version " + Version.id());
+        system.out().println("JUnit version " + Version.ID);
 
         JUnitCommandLineParseResult jUnitCommandLineParseResult = JUnitCommandLineParseResult.parse(args);
 
@@ -81,7 +81,7 @@ public class JUnitCore {
      * @return the version number of this release
      */
     public String getVersion() {
-        return Version.id();
+        return Version.ID;
     }
 
     /**
