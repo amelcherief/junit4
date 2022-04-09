@@ -1,5 +1,7 @@
 package org.junit;
 
+import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 import org.junit.function.ThrowingRunnable;
 import org.junit.internal.ArrayComparisonFailure;
 import org.junit.internal.ExactComparisonCriteria;
@@ -815,7 +817,6 @@ public class Assert {
         String className = value == null ? "null" : value.getClass().getName();
         return className + "<" + valueString + ">";
     }
-
 
     /**
      * Asserts that {@code runnable} throws an exception of type {@code expectedThrowable} when
