@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.text.NumberFormat;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.Test;
@@ -149,6 +150,13 @@ public abstract class BaseTestRunner implements TestListener {
     }
 
     /**
+     * switch fgFilterStack from true to false
+     */
+    protected void switchFgFilterStack() {
+        fgFilterStack = false;
+    }
+    
+    /**
      * Processes the command line arguments and
      * returns the name of the suite class to run or null
      */
@@ -158,12 +166,13 @@ public abstract class BaseTestRunner implements TestListener {
             if (args[i].equals("-noloading")) {
                 setLoading(false);
             } else if (args[i].equals("-nofilterstack")) {
-                fgFilterStack = false;
+                switchFgFilterStack();
             } else if (args[i].equals("-c")) {
                 if (args.length > i + 1) {
                     suiteName = extractClassName(args[i + 1]);
                 } else {
-                    System.out.println("Missing Test class name");
+                    Logger logger = Logger.getLogger("logger");
+                    logger.log(null, "Missing Test class name");
                 }
                 i++;
             } else {
@@ -235,13 +244,16 @@ public abstract class BaseTestRunner implements TestListener {
             setPreferences(new Properties(getPreferences()));
             getPreferences().load(is);
         } catch (IOException ignored) {
+            ignored.printStackTrace();
         } catch (SecurityException ignored) {
+            ignored.printStackTrace();
         } finally {
             try {
                 if (is != null) {
                     is.close();
                 }
             } catch (IOException e1) {
+                e1.printStackTrace();
             }
         }
     }
@@ -259,6 +271,7 @@ public abstract class BaseTestRunner implements TestListener {
         try {
             intValue = Integer.parseInt(value);
         } catch (NumberFormatException ne) {
+            ne.printStackTrace();
         }
         return intValue;
     }
@@ -290,14 +303,14 @@ public abstract class BaseTestRunner implements TestListener {
                     pw.println(line);
                 }
             }
-        } catch (Exception IOException) {
+        } catch (IOException e) {
             return stack; // return the stack unfiltered
         }
         return sw.toString();
     }
 
     protected static boolean showStackRaw() {
-        return !getPreference("filterstack").equals("true") || fgFilterStack == false;
+        return !getPreference("filterstack").equals("true") || !fgFilterStack;
     }
 
     static boolean filterLine(String line) {
@@ -312,7 +325,7 @@ public abstract class BaseTestRunner implements TestListener {
                 "java.lang.reflect.Method.invoke("
         };
         for (int i = 0; i < patterns.length; i++) {
-            if (line.indexOf(patterns[i]) > 0) {
+            if (line.contains(patterns[i])) {
                 return true;
             }
         }
