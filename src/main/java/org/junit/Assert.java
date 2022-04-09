@@ -1,7 +1,5 @@
 package org.junit;
 
-import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
 import org.junit.function.ThrowingRunnable;
 import org.junit.internal.ArrayComparisonFailure;
 import org.junit.internal.ExactComparisonCriteria;
@@ -601,24 +599,16 @@ public class Assert {
     }
 
     private static boolean doubleIsDifferent(double d1, double d2, double delta) {
-        if (Double.compare(d1, d2) == 0) {
+        if (Double.compare(d1, d2) == 0 || Math.abs(d1 - d2) <= delta) {
             return false;
         }
-        if ((Math.abs(d1 - d2) <= delta)) {
-            return false;
-        }
-
         return true;
     }
 
     private static boolean floatIsDifferent(float f1, float f2, float delta) {
-        if (Float.compare(f1, f2) == 0) {
+        if (Float.compare(f1, f2) == 0 || Math.abs(f1 - f2) <= delta) {
             return false;
         }
-        if ((Math.abs(f1 - f2) <= delta)) {
-            return false;
-        }
-
         return true;
     }
 
@@ -649,27 +639,6 @@ public class Assert {
     }
 
     /**
-     * @deprecated Use
-     *             <code>assertEquals(double expected, double actual, double delta)</code>
-     *             instead
-     */
-    @Deprecated
-    public static void assertEquals(double expected, double actual) {
-        assertEquals(null, expected, actual);
-    }
-
-    /**
-     * @deprecated Use
-     *             <code>assertEquals(String message, double expected, double actual, double delta)</code>
-     *             instead
-     */
-    @Deprecated
-    public static void assertEquals(String message, double expected,
-            double actual) {
-        fail("Use assertEquals(expected, actual, delta) to compare floating-point numbers");
-    }
-
-    /**
      * Asserts that two doubles are equal to within a positive delta.
      * If they are not, an {@link AssertionError} is thrown. If the expected
      * value is infinity then the delta value is ignored.NaNs are considered
@@ -685,21 +654,6 @@ public class Assert {
         assertEquals(null, expected, actual, delta);
     }
 
-    /**
-     * Asserts that two floats are equal to within a positive delta.
-     * If they are not, an {@link AssertionError} is thrown. If the expected
-     * value is infinity then the delta value is ignored. NaNs are considered
-     * equal: <code>assertEquals(Float.NaN, Float.NaN, *)</code> passes
-     *
-     * @param expected expected value
-     * @param actual the value to check against <code>expected</code>
-     * @param delta the maximum delta between <code>expected</code> and
-     * <code>actual</code> for which both numbers are still
-     * considered equal.
-     */
-    public static void assertEquals(float expected, float actual, float delta) {
-        assertEquals(null, expected, actual, delta);
-    }
 
     /**
      * Asserts that an object isn't null. If it is an {@link AssertionError} is
@@ -862,107 +816,6 @@ public class Assert {
         return className + "<" + valueString + ">";
     }
 
-    /**
-     * Asserts that two object arrays are equal. If they are not, an
-     * {@link AssertionError} is thrown with the given message. If
-     * <code>expecteds</code> and <code>actuals</code> are <code>null</code>,
-     * they are considered equal.
-     *
-     * @param message the identifying message for the {@link AssertionError} (<code>null</code>
-     * okay)
-     * @param expecteds Object array or array of arrays (multi-dimensional array) with
-     * expected values.
-     * @param actuals Object array or array of arrays (multi-dimensional array) with
-     * actual values
-     * @deprecated use assertArrayEquals
-     */
-    @Deprecated
-    public static void assertEquals(String message, Object[] expecteds,
-            Object[] actuals) {
-        assertArrayEquals(message, expecteds, actuals);
-    }
-
-    /**
-     * Asserts that two object arrays are equal. If they are not, an
-     * {@link AssertionError} is thrown. If <code>expected</code> and
-     * <code>actual</code> are <code>null</code>, they are considered
-     * equal.
-     *
-     * @param expecteds Object array or array of arrays (multi-dimensional array) with
-     * expected values
-     * @param actuals Object array or array of arrays (multi-dimensional array) with
-     * actual values
-     * @deprecated use assertArrayEquals
-     */
-    @Deprecated
-    public static void assertEquals(Object[] expecteds, Object[] actuals) {
-        assertArrayEquals(expecteds, actuals);
-    }
-
-    /**
-     * Asserts that <code>actual</code> satisfies the condition specified by
-     * <code>matcher</code>. If not, an {@link AssertionError} is thrown with
-     * information about the matcher and failing value. Example:
-     *
-     * <pre>
-     *   assertThat(0, is(1)); // fails:
-     *     // failure message:
-     *     // expected: is &lt;1&gt;
-     *     // got value: &lt;0&gt;
-     *   assertThat(0, is(not(1))) // passes
-     * </pre>
-     *
-     * <code>org.hamcrest.Matcher</code> does not currently document the meaning
-     * of its type parameter <code>T</code>.  This method assumes that a matcher
-     * typed as <code>Matcher&lt;T&gt;</code> can be meaningfully applied only
-     * to values that could be assigned to a variable of type <code>T</code>.
-     *
-     * @param <T> the static type accepted by the matcher (this can flag obvious
-     * compile-time problems such as {@code assertThat(1, is("a"))}
-     * @param actual the computed value being compared
-     * @param matcher an expression, built of {@link Matcher}s, specifying allowed
-     * values
-     * @see org.hamcrest.CoreMatchers
-     * @deprecated use {@code org.hamcrest.MatcherAssert.assertThat()}
-     */
-    @Deprecated
-    public static <T> void assertThat(T actual, Matcher<? super T> matcher) {
-        assertThat("", actual, matcher);
-    }
-
-    /**
-     * Asserts that <code>actual</code> satisfies the condition specified by
-     * <code>matcher</code>. If not, an {@link AssertionError} is thrown with
-     * the reason and information about the matcher and failing value. Example:
-     *
-     * <pre>
-     *   assertThat(&quot;Help! Integers don't work&quot;, 0, is(1)); // fails:
-     *     // failure message:
-     *     // Help! Integers don't work
-     *     // expected: is &lt;1&gt;
-     *     // got value: &lt;0&gt;
-     *   assertThat(&quot;Zero is one&quot;, 0, is(not(1))) // passes
-     * </pre>
-     *
-     * <code>org.hamcrest.Matcher</code> does not currently document the meaning
-     * of its type parameter <code>T</code>.  This method assumes that a matcher
-     * typed as <code>Matcher&lt;T&gt;</code> can be meaningfully applied only
-     * to values that could be assigned to a variable of type <code>T</code>.
-     *
-     * @param reason additional information about the error
-     * @param <T> the static type accepted by the matcher (this can flag obvious
-     * compile-time problems such as {@code assertThat(1, is("a"))}
-     * @param actual the computed value being compared
-     * @param matcher an expression, built of {@link Matcher}s, specifying allowed
-     * values
-     * @see org.hamcrest.CoreMatchers
-     * @deprecated use {@code org.hamcrest.MatcherAssert.assertThat()}
-     */
-    @Deprecated
-    public static <T> void assertThat(String reason, T actual,
-            Matcher<? super T> matcher) {
-        MatcherAssert.assertThat(reason, actual, matcher);
-    }
 
     /**
      * Asserts that {@code runnable} throws an exception of type {@code expectedThrowable} when
