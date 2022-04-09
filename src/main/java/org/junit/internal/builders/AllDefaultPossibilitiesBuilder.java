@@ -16,14 +16,6 @@ public class AllDefaultPossibilitiesBuilder extends RunnerBuilder {
         canUseSuiteMethod = true;
     }
 
-    /**
-     * @deprecated used {@link #AllDefaultPossibilitiesBuilder()}.
-     */
-    @Deprecated
-    public AllDefaultPossibilitiesBuilder(boolean canUseSuiteMethod) {
-        this.canUseSuiteMethod = canUseSuiteMethod;
-    }
-
     @Override
     public Runner runnerForClass(Class<?> testClass) throws Throwable {
         List<RunnerBuilder> builders = Arrays.asList(
