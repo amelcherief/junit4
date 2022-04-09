@@ -71,7 +71,7 @@ public class MoneyTest extends TestCase {
 
     public void testBagNotEquals() {
         IMoney bag = MoneyBag.create(f12CHF, f7USD);
-        assertFalse(bag.equals(new Money(12, "DEM").add(f7USD)));
+        assertNotEquals(new Money(12, "DEM").add(f7USD), bag);
     }
 
     public void testMoneyBagEquals() {
@@ -100,7 +100,7 @@ public class MoneyTest extends TestCase {
     }
 
     public void testMoneyHash() {
-        assertTrue(!f12CHF.equals(null));
+        assertNotEquals(null,f12CHF);
         Money equal = new Money(12, "CHF");
         assertEquals(f12CHF.hashCode(), equal.hashCode());
     }

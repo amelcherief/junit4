@@ -33,7 +33,7 @@ public class ListTest extends TestCase {
         for (int i = 0; i < 100; i++) {
             fullList.add(i);
         }
-        assertTrue(fullList.size() == 100 + size);
+        assertEquals(100 + size, fullList.size());
     }
 
     public void testContains() {
