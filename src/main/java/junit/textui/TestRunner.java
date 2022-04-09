@@ -116,6 +116,7 @@ public class TestRunner extends BaseTestRunner {
         try {
             System.in.read();
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -160,7 +161,7 @@ public class TestRunner extends BaseTestRunner {
         }
 
         if (testCase.equals("")) {
-            throw new Exception("Usage: TestRunner [-wait] testCaseName, where name is the name of the TestCase class");
+            throw new TestRunnerUse("Usage: TestRunner [-wait] testCaseName, where name is the name of the TestCase class");
         }
 
         try {
@@ -170,11 +171,11 @@ public class TestRunner extends BaseTestRunner {
             Test suite = getTest(testCase);
             return doRun(suite, wait);
         } catch (Exception e) {
-            throw new Exception("Could not create and run test suite: " + e);
+            throw new CreationAndRunException("Could not create and run test suite: " + e);
         }
     }
 
-    protected TestResult runSingleMethod(String testCase, String method, boolean wait) throws Exception {
+    protected TestResult runSingleMethod(String testCase, String method, boolean wait) throws ClassNotFoundException{
         Class<? extends TestCase> testClass = loadSuiteClass(testCase).asSubclass(TestCase.class);
         Test test = TestSuite.createTest(testClass, method);
         return doRun(test, wait);
