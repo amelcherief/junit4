@@ -135,7 +135,9 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Orderable 
             Method m = test.getClass().getMethod(test.getName());
             return m.getDeclaredAnnotations();
         } catch (SecurityException e) {
+            e.printStackTrace();
         } catch (NoSuchMethodException e) {
+            e.printStackTrace();
         }
         return new Annotation[0];
     }
@@ -155,9 +157,9 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Orderable 
             TestSuite filtered = new TestSuite(suite.getName());
             int n = suite.testCount();
             for (int i = 0; i < n; i++) {
-                Test test = suite.testAt(i);
-                if (filter.shouldRun(makeDescription(test))) {
-                    filtered.addTest(test);
+                Test test1 = suite.testAt(i);
+                if (filter.shouldRun(makeDescription(test1))) {
+                    filtered.addTest(test1);
                 }
             }
             setTest(filtered);

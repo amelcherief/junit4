@@ -22,8 +22,6 @@ import org.junit.runners.Suite.SuiteClasses;
         TemporaryFolderUsageTest.class,
         TestRuleTest.class,
         TestWatcherTest.class,
-        TestWatchmanTest.class,
-        TestWatchmanTest.class,
         TimeoutRuleTest.class,
         VerifierRuleTest.class
 })

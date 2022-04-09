@@ -135,13 +135,6 @@ public class MethodRulesTest {
     private static String log;
 
     public static class OnFailureTest {
-        @Rule
-        public MethodRule watchman = new TestWatchman() {
-            @Override
-            public void failed(Throwable e, FrameworkMethod method) {
-                log += method.getName() + " " + e.getClass().getSimpleName();
-            }
-        };
 
         @Test
         public void nothing() {
@@ -158,20 +151,6 @@ public class MethodRulesTest {
 
     public static class WatchmanTest {
         private static String watchedLog;
-
-        @Rule
-        public MethodRule watchman = new TestWatchman() {
-            @Override
-            public void failed(Throwable e, FrameworkMethod method) {
-                watchedLog += method.getName() + " "
-                        + e.getClass().getSimpleName() + "\n";
-            }
-
-            @Override
-            public void succeeded(FrameworkMethod method) {
-                watchedLog += method.getName() + " " + "success!\n";
-            }
-        };
 
         @Test
         public void fails() {
@@ -198,24 +177,6 @@ public class MethodRulesTest {
         public void before() {
             watchedLog += "before ";
         }
-
-        @Rule
-        public MethodRule watchman = new TestWatchman() {
-            @Override
-            public void starting(FrameworkMethod method) {
-                watchedLog += "starting ";
-            }
-
-            @Override
-            public void finished(FrameworkMethod method) {
-                watchedLog += "finished ";
-            }
-
-            @Override
-            public void succeeded(FrameworkMethod method) {
-                watchedLog += "succeeded ";
-            }
-        };
 
         @After
         public void after() {
