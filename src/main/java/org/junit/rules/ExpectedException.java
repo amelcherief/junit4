@@ -9,7 +9,6 @@ import static org.junit.internal.matchers.ThrowableMessageMatcher.hasMessage;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.StringDescription;
-import org.junit.AssumptionViolatedException;
 import org.junit.runners.model.Statement;
 
 /**

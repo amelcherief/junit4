@@ -10,7 +10,7 @@ import static org.junit.Assume.assumeTrue;
 
 import java.util.concurrent.TimeUnit;
 
-import org.junit.AssumptionViolatedException;
+import org.junit.ViolateAssumptionException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -76,7 +76,7 @@ public class StopwatchTest {
             }
 
             @Override
-            protected void skipped(long nanos, AssumptionViolatedException e, Description description) {
+            protected void skipped(long nanos,ViolateAssumptionException e, Description description) {
                 StopwatchTest.record = new Record(nanos, TestStatus.SKIPPED, description);
                 simulateTimePassing(1);
             }

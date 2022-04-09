@@ -6,7 +6,6 @@ import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeTrue;
 import static org.junit.experimental.results.PrintableResult.testResult;
 import static org.junit.experimental.results.ResultMatchers.failureCountIs;
 import static org.junit.experimental.results.ResultMatchers.isSuccessful;
@@ -14,7 +13,6 @@ import static org.junit.experimental.results.ResultMatchers.isSuccessful;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Set;
@@ -22,7 +20,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.junit.After;
-import org.junit.AssumptionViolatedException;
+import org.junit.ViolateAssumptionException;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -40,7 +38,7 @@ public class TempFolderRuleTest {
         }
 
         @Test
-        public void testTempFolderLocation() throws IOException {
+        public void testTempFolderLocation() {
             File folderRoot = folder.getRoot();
             String tmpRoot = System.getProperty("java.io.tmpdir");
             assertTrue(folderRoot.toString().startsWith(tmpRoot));
@@ -213,7 +211,7 @@ public class TempFolderRuleTest {
             }
             return convertedPermissions;
         } catch (Exception e) {
-            throw new AssumptionViolatedException("Test requires at least Java 1.7", e);
+            throw new ViolateAssumptionException("Test requires at least Java 1.7", e);
         }
     }
 

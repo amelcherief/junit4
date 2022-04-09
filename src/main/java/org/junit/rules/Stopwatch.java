@@ -1,6 +1,6 @@
 package org.junit.rules;
 
-import org.junit.AssumptionViolatedException;
+import org.junit.ViolateAssumptionException;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
@@ -114,7 +114,7 @@ public class Stopwatch implements TestRule {
     /**
      * Invoked when a test is skipped due to a failed assumption.
      */
-    protected void skipped(long nanos, AssumptionViolatedException e, Description description) {
+    protected void skipped(long nanos, ViolateAssumptionException e, Description description) {
     }
 
     /**
@@ -168,7 +168,7 @@ public class Stopwatch implements TestRule {
             Stopwatch.this.failed(getNanos(), e, description);
         }
 
-        @Override protected void skipped(AssumptionViolatedException e, Description description) {
+        @Override protected void skipped(ViolateAssumptionException e, Description description) {
             Stopwatch.this.stopping();
             Stopwatch.this.skipped(getNanos(), e, description);
         }

@@ -3,7 +3,7 @@ package org.junit.rules;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.AssumptionViolatedException;
+import org.junit.ViolateAssumptionException;
 import org.junit.Rule;
 import org.junit.runner.Description;
 import org.junit.runners.model.MultipleFailureException;
@@ -97,8 +97,8 @@ public abstract class TestWatcher implements TestRule {
             org.junit.internal.AssumptionViolatedException e, Description description,
             List<Throwable> errors) {
         try {
-            if (e instanceof AssumptionViolatedException) {
-                skipped((AssumptionViolatedException) e, description);
+            if (e instanceof ViolateAssumptionException) {
+                skipped(e, description);
             } else {
                 skipped(e, description);
             }
@@ -140,7 +140,7 @@ public abstract class TestWatcher implements TestRule {
     /**
      * Invoked when a test is skipped due to a failed assumption.
      */
-    protected void skipped(AssumptionViolatedException e, Description description) {
+    protected void skipped(ViolateAssumptionException e, Description description) {
         // For backwards compatibility with JUnit 4.11 and earlier, call the legacy version
         org.junit.internal.AssumptionViolatedException asInternalException = e;
         skipped(asInternalException, description);

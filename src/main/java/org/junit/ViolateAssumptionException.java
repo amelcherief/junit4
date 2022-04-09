@@ -11,14 +11,14 @@ import org.hamcrest.Matcher;
  * @since 4.12
  */
 @SuppressWarnings("deprecation")
-public class AssumptionViolatedException extends org.junit.internal.AssumptionViolatedException {
+public class ViolateAssumptionException extends org.junit.internal.AssumptionViolatedException {
     private static final long serialVersionUID = 1L;
 
     /**
      * An assumption exception with the given <i>actual</i> value and a <i>matcher</i> describing 
      * the expectation that failed.
      */
-    public <T> AssumptionViolatedException(T actual, Matcher<T> matcher) {
+    public <T> ViolateAssumptionException(T actual, Matcher<T> matcher) {
         super(actual, matcher);
     }
 
@@ -26,21 +26,21 @@ public class AssumptionViolatedException extends org.junit.internal.AssumptionVi
      * An assumption exception with a message with the given <i>actual</i> value and a
      * <i>matcher</i> describing the expectation that failed.
      */
-    public <T> AssumptionViolatedException(String message, T expected, Matcher<T> matcher) {
+    public <T> ViolateAssumptionException(String message, T expected, Matcher<T> matcher) {
         super(message, expected, matcher);
     }
 
     /**
      * An assumption exception with the given message only.
      */
-    public AssumptionViolatedException(String message) {
+    public ViolateAssumptionException(String message) {
         super(message);
     }
 
     /**
      * An assumption exception with the given message and a cause.
      */
-    public AssumptionViolatedException(String message, Throwable t) {
+    public ViolateAssumptionException(String message, Throwable t) {
         super(message, t);
     }
 }

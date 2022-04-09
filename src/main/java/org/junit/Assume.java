@@ -36,14 +36,6 @@ import org.hamcrest.Matcher;
 public class Assume {
 
     /**
-     * Do not instantiate.
-     * @deprecated since 4.13.
-     */
-    @Deprecated
-    public Assume() {
-    }
-
-    /**
      * If called with an expression evaluating to {@code false}, the test will halt and be ignored.
      */
     public static void assumeTrue(boolean b) {
@@ -65,7 +57,7 @@ public class Assume {
      * @param message A message to pass to {@link AssumptionViolatedException}.
      */
     public static void assumeTrue(String message, boolean b) {
-        if (!b) throw new AssumptionViolatedException(message);
+        if (!b) throw new ViolateAssumptionException(message);
     }
 
     /**
@@ -103,7 +95,7 @@ public class Assume {
      */
     public static <T> void assumeThat(T actual, Matcher<T> matcher) {
         if (!matcher.matches(actual)) {
-            throw new AssumptionViolatedException(actual, matcher);
+            throw new ViolateAssumptionException(actual, matcher);
         }
     }
 
@@ -126,7 +118,7 @@ public class Assume {
      */
     public static <T> void assumeThat(String message, T actual, Matcher<T> matcher) {
         if (!matcher.matches(actual)) {
-            throw new AssumptionViolatedException(message, actual, matcher);
+            throw new ViolateAssumptionException(message, actual, matcher);
         }
     }
 

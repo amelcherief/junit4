@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assume;
-import org.junit.AssumptionViolatedException;
+import org.junit.ViolateAssumptionException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -82,7 +82,7 @@ public class AssumptionTest {
         try {
             assumeThat(1, is(2));
             fail("should throw AssumptionViolatedException");
-        } catch (AssumptionViolatedException e) {
+        } catch (ViolateAssumptionException e) {
             // expected
         }
     }
@@ -105,7 +105,7 @@ public class AssumptionTest {
         try {
             assumeNotNull(objects);
             fail("should throw AssumptionViolatedException");
-        } catch (AssumptionViolatedException e) {
+        } catch (ViolateAssumptionException e) {
             // expected
         }
     }
@@ -115,7 +115,7 @@ public class AssumptionTest {
         try {
             assumeNotNull((Object[]) null);
             fail("should throw AssumptionViolatedException");
-        } catch (AssumptionViolatedException e) {
+        } catch (ViolateAssumptionException e) {
             // expected
         }
     }
@@ -132,7 +132,7 @@ public class AssumptionTest {
         try {
             Object[] objects = {1, 2, null};
             assumeNotNull(objects);
-        } catch (AssumptionViolatedException e) {
+        } catch (ViolateAssumptionException e) {
             assertThat(e.getMessage(), containsString("1, 2, null"));
         } catch (Exception e) {
             fail("Should have thrown AssumptionViolatedException");
@@ -145,7 +145,7 @@ public class AssumptionTest {
         try {
             assumeNoException(exception);
             fail("Should have thrown exception");
-        } catch (AssumptionViolatedException e) {
+        } catch (ViolateAssumptionException e) {
             assertThat(e.getCause(), is(exception));
         }
     }
@@ -158,7 +158,7 @@ public class AssumptionTest {
         try {
             Assume.assumeTrue(false);
             fail("should throw AssumptionViolatedException");
-        } catch (AssumptionViolatedException e) {
+        } catch (ViolateAssumptionException e) {
             assertEquals("got: <false>, expected: is <true>", e.getMessage());
         }
     }
@@ -168,7 +168,7 @@ public class AssumptionTest {
         try {
             Assume.assumeFalse(true);
             fail("should throw AssumptionViolatedException");
-        } catch (AssumptionViolatedException e) {
+        } catch (ViolateAssumptionException e) {
             assertEquals("got: <true>, expected: is <false>", e.getMessage());
         }
     }

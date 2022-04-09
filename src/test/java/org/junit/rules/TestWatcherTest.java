@@ -124,12 +124,11 @@ public class TestWatcherTest {
             }
 
             @Override
-            protected void skipped(org.junit.AssumptionViolatedException e, Description description) {
+            protected void skipped(org.junit.ViolateAssumptionException e, Description description) {
                 throw new RuntimeException("skipped failed");
             }
 
             @Override
-            @SuppressWarnings("deprecation")
             protected void skipped(AssumptionViolatedException e, Description description) {
                 throw new RuntimeException("deprecated skipped failed");
             }
@@ -241,12 +240,12 @@ public class TestWatcherTest {
 
         public static class Skipped {
             private static Description catchedDescription;
-            private static org.junit.AssumptionViolatedException catchedException;
+            private static org.junit.ViolateAssumptionException catchedException;
 
             @Rule
             public final TestRule watcher = new TestWatcher() {
                 @Override
-                protected void skipped(org.junit.AssumptionViolatedException e, Description description) {
+                protected void skipped(org.junit.ViolateAssumptionException e, Description description) {
                     catchedDescription = description;
                     catchedException = e;
                 }
@@ -262,7 +261,7 @@ public class TestWatcherTest {
         public void skipped() {
             JUnitCore.runClasses(Skipped.class);
             assertEquals("test skipped", Skipped.catchedException.getMessage());
-            assertEquals(org.junit.AssumptionViolatedException.class, Skipped.catchedException.getClass());
+            assertEquals(org.junit.ViolateAssumptionException.class, Skipped.catchedException.getClass());
             assertEquals("test(org.junit.rules.TestWatcherTest$CallbackArguments$Skipped)",
                     Skipped.catchedDescription.getDisplayName());
         }
@@ -274,7 +273,6 @@ public class TestWatcherTest {
             @Rule
             public final TestRule watcher = new TestWatcher() {
                 @Override
-                @SuppressWarnings("deprecation")
                 protected void skipped(AssumptionViolatedException e, Description description) {
                     catchedDescription = description;
                     catchedException = e;

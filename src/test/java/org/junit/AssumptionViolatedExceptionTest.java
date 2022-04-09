@@ -49,31 +49,31 @@ public class AssumptionViolatedExceptionTest {
     @Theory
     public void toStringReportsMatcher(Integer actual, Matcher<Integer> matcher) {
         assumeThat(matcher, notNullValue());
-        assertThat(new AssumptionViolatedException(actual, matcher).toString(),
+        assertThat(new ViolateAssumptionException(actual, matcher).toString(),
                 containsString(matcher.toString()));
     }
 
     @Theory
     public void toStringReportsValue(Integer actual, Matcher<Integer> matcher) {
-        assertThat(new AssumptionViolatedException(actual, matcher).toString(),
+        assertThat(new ViolateAssumptionException(actual, matcher).toString(),
                 containsString(String.valueOf(actual)));
     }
 
     @Test
     public void assumptionViolatedExceptionWithMatcherDescribesItself() {
-        AssumptionViolatedException e = new AssumptionViolatedException(3, is(2));
+        ViolateAssumptionException e = new ViolateAssumptionException(3, is(2));
         assertThat(StringDescription.asString(e), is("got: <3>, expected: is <2>"));
     }
 
     @Test
     public void simpleAssumptionViolatedExceptionDescribesItself() {
-        AssumptionViolatedException e = new AssumptionViolatedException("not enough money");
+        ViolateAssumptionException e = new ViolateAssumptionException("not enough money");
         assertThat(StringDescription.asString(e), is("not enough money"));
     }
 
     @Test
     public void canInitCauseWithInstanceCreatedWithString() {
-      AssumptionViolatedException e = new AssumptionViolatedException("invalid number");
+        ViolateAssumptionException e = new ViolateAssumptionException("invalid number");
       Throwable cause = new RuntimeException("cause");
       e.initCause(cause);
       assertThat(e.getCause(), is(cause));
@@ -112,25 +112,25 @@ public class AssumptionViolatedExceptionTest {
     @Test
     public void canSetCauseWithInstanceCreatedWithExplicitThrowableConstructor() {
       Throwable cause = new Exception();
-      AssumptionViolatedException e = new AssumptionViolatedException("invalid number", cause);
+      ViolateAssumptionException e = new ViolateAssumptionException("invalid number", cause);
       assertThat(e.getCause(), is(cause));
     }
 
     @Test
     public void assumptionViolatedExceptionWithoutValueAndMatcherCanBeReserialized_v4_13()
             throws IOException, ClassNotFoundException {
-        assertReserializable(new AssumptionViolatedException(MESSAGE));
+        assertReserializable(new ViolateAssumptionException(MESSAGE));
     }
 
     @Test
     public void assumptionViolatedExceptionWithValueAndMatcherCanBeReserialized_v4_13()
             throws IOException, ClassNotFoundException {
-        assertReserializable(new AssumptionViolatedException(MESSAGE, TWO, SERIALIZABLE_IS_THREE));
+        assertReserializable(new ViolateAssumptionException(MESSAGE, TWO, SERIALIZABLE_IS_THREE));
     }
 
     @Test
     public void unserializableValueAndMatcherCanBeSerialized() throws IOException, ClassNotFoundException {
-        AssumptionViolatedException exception = new AssumptionViolatedException(MESSAGE,
+        ViolateAssumptionException exception = new ViolateAssumptionException(MESSAGE,
                 UNSERIALIZABLE_VALUE, UNSERIALIZABLE_MATCHER);
 
         assertCanBeSerialized(exception);
@@ -138,20 +138,20 @@ public class AssumptionViolatedExceptionTest {
 
     @Test
     public void nullValueAndMatcherCanBeSerialized() throws IOException, ClassNotFoundException {
-        AssumptionViolatedException exception = new AssumptionViolatedException(MESSAGE);
+        ViolateAssumptionException exception = new ViolateAssumptionException(MESSAGE);
 
         assertCanBeSerialized(exception);
     }
 
     @Test
     public void serializableValueAndMatcherCanBeSerialized() throws IOException, ClassNotFoundException {
-        AssumptionViolatedException exception = new AssumptionViolatedException(MESSAGE,
+        ViolateAssumptionException exception = new ViolateAssumptionException(MESSAGE,
                 TWO, SERIALIZABLE_IS_THREE);
 
         assertCanBeSerialized(exception);
     }
 
-    private void assertCanBeSerialized(AssumptionViolatedException exception)
+    private void assertCanBeSerialized(ViolateAssumptionException exception)
             throws IOException, ClassNotFoundException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -159,24 +159,24 @@ public class AssumptionViolatedExceptionTest {
 
         ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
         ObjectInputStream ois = new ObjectInputStream(bais);
-        AssumptionViolatedException fromStream = (AssumptionViolatedException) ois.readObject();
+        ViolateAssumptionException fromStream = (ViolateAssumptionException) ois.readObject();
 
         assertSerializedCorrectly(exception, fromStream);
     }
 
-    private void assertReserializable(AssumptionViolatedException expected)
+    private void assertReserializable(ViolateAssumptionException expected)
             throws IOException, ClassNotFoundException {
         String resourceName = name.getMethodName();
         InputStream resource = getClass().getResourceAsStream(resourceName);
         assertNotNull("Could not read resource " + resourceName, resource);
         ObjectInputStream objectInputStream = new ObjectInputStream(resource);
-        AssumptionViolatedException fromStream = (AssumptionViolatedException) objectInputStream.readObject();
+        ViolateAssumptionException fromStream = (ViolateAssumptionException) objectInputStream.readObject();
 
         assertSerializedCorrectly(expected, fromStream);
     }
 
     private void assertSerializedCorrectly(
-            AssumptionViolatedException expected, AssumptionViolatedException fromStream) {
+            ViolateAssumptionException expected, ViolateAssumptionException fromStream) {
         assertNotNull(fromStream);
 
         // Exceptions don't implement equals() so we need to compare field by field
