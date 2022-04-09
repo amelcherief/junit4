@@ -174,7 +174,7 @@ public class TemporaryFolder extends ExternalResource {
      * folder.
      */
     public File newFolder(String path) throws IOException {
-        return newFolder(new String[]{path});
+        return newFolder(path);
     }
 
     /**

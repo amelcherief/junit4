@@ -49,6 +49,24 @@ class JUnitCommandLineParseResult {
     private void parseArgs(String[] args) {
         parseParameters(parseOptions(args));
     }
+    
+    private void parseOptionsHelp(String[] args, String arg,  int i) {
+        String filterSpec;
+        if (arg.equals("--filter")) {
+            ++i;
+
+            if (i < args.length) {
+                filterSpec = args[i];
+                filterSpecs.add(filterSpec);
+            } else {
+                parserErrors.add(new CommandLineParserError(arg + " value not specified"));
+            }
+        } else {
+            filterSpec = arg.substring(arg.indexOf('=') + 1);
+            filterSpecs.add(filterSpec);
+        }
+
+    }
 
     String[] parseOptions(String... args) {
         for (int i = 0; i != args.length; ++i) {
@@ -58,21 +76,7 @@ class JUnitCommandLineParseResult {
                 return copyArray(args, i + 1, args.length);
             } else if (arg.startsWith("--")) {
                 if (arg.startsWith("--filter=") || arg.equals("--filter")) {
-                    String filterSpec;
-                    if (arg.equals("--filter")) {
-                        ++i;
-
-                        if (i < args.length) {
-                            filterSpec = args[i];
-                        } else {
-                            parserErrors.add(new CommandLineParserError(arg + " value not specified"));
-                            break;
-                        }
-                    } else {
-                        filterSpec = arg.substring(arg.indexOf('=') + 1);
-                    }
-
-                    filterSpecs.add(filterSpec);
+                    this.parseOptionsHelp(args, arg, i);
                 } else {
                     parserErrors.add(new CommandLineParserError("JUnit knows nothing about the " + arg + " option"));
                 }

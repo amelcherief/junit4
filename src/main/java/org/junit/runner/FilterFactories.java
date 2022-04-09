@@ -8,6 +8,10 @@ import org.junit.runner.manipulation.Filter;
  * Utility class whose methods create a {@link FilterFactory}.
  */
 class FilterFactories {
+    
+    private FilterFactories() {
+    }
+    
     /**
      * Creates a {@link Filter}.
      *

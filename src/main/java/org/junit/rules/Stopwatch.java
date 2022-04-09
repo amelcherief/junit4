@@ -103,24 +103,28 @@ public class Stopwatch implements TestRule {
      * Invoked when a test succeeds
      */
     protected void succeeded(long nanos, Description description) {
+        // called when a test succeds
     }
 
     /**
      * Invoked when a test fails
      */
     protected void failed(long nanos, Throwable e, Description description) {
+        // called when a test fails
     }
 
     /**
      * Invoked when a test is skipped due to a failed assumption.
      */
     protected void skipped(long nanos, ViolateAssumptionException e, Description description) {
+        // called when a test is skipped
     }
 
     /**
      * Invoked when a test method finishes (whether passing or failing)
      */
     protected void finished(long nanos, Description description) {
+        // called when a test is finished
     }
 
     private long getNanos() {
