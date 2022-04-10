@@ -478,14 +478,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
             Map<Description, List<T>> childMap = new LinkedHashMap<Description, List<T>>(
                     children.size());
             for (T child : children) {
-                Description description = describeChild(child);
-                List<T> childrenWithDescription = childMap.get(description);
-                if (childrenWithDescription == null) {
-                    childrenWithDescription = new ArrayList<T>(1);
-                    childMap.put(description, childrenWithDescription);
-                }
-                childrenWithDescription.add(child);
-                orderer.apply(child);
+                childrenDescription(orderer, child, childMap);
             }
 
             List<Description> inOrder = orderer.order(childMap.keySet());
@@ -498,6 +491,17 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         } finally {
             childrenLock.unlock();
         }
+    }
+    
+    public void childrenDescription(Orderer orderer, T child, Map<Description, List<T>> childMap) throws InvalidOrderingException {
+        Description description = describeChild(child);
+        List<T> childrenWithDescription = childMap.get(description);
+        if (childrenWithDescription == null) {
+            childrenWithDescription = new ArrayList<T>(1);
+            childMap.put(description, childrenWithDescription);
+        }
+        childrenWithDescription.add(child);
+        orderer.apply(child);
     }
 
     //

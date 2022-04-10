@@ -858,28 +858,32 @@ public class Assert {
                 @SuppressWarnings("unchecked") T retVal = (T) actualThrown;
                 return retVal;
             } else {
-                String expected = formatClass(expectedThrowable);
-                Class<? extends Throwable> actualThrowable = actualThrown.getClass();
-                String actual = formatClass(actualThrowable);
-                if (expected.equals(actual)) {
-                    // There must be multiple class loaders. Add the identity hash code so the message
-                    // doesn't say "expected: java.lang.String<my.package.MyException> ..."
-                    expected += "@" + Integer.toHexString(System.identityHashCode(expectedThrowable));
-                    actual += "@" + Integer.toHexString(System.identityHashCode(actualThrowable));
-                }
-                String mismatchMessage = buildPrefix(message)
-                        + format("unexpected exception type thrown;", expected, actual);
-
-                // The AssertionError(String, Throwable) ctor is only available on JDK7.
-                AssertionError assertionError = new AssertionError(mismatchMessage);
-                assertionError.initCause(actualThrown);
-                throw assertionError;
+                unexpectedExceptionThrown(message, expectedThrowable, actualThrown);
             }
         }
         String notThrownMessage = buildPrefix(message) + String
                 .format("expected %s to be thrown, but nothing was thrown",
                         formatClass(expectedThrowable));
         throw new AssertionError(notThrownMessage);
+    }
+    
+    public static void unexpectedExceptionThrown(String message, Class<? extends Throwable> expectedThrowable, Throwable actualThrown) {
+        String expected = formatClass(expectedThrowable);
+        Class<? extends Throwable> actualThrowable = actualThrown.getClass();
+        String actual = formatClass(actualThrowable);
+        if (expected.equals(actual)) {
+            // There must be multiple class loaders. Add the identity hash code so the message
+            // doesn't say "expected: java.lang.String<my.package.MyException> ..."
+            expected += "@" + Integer.toHexString(System.identityHashCode(expectedThrowable));
+            actual += "@" + Integer.toHexString(System.identityHashCode(actualThrowable));
+        }
+        String mismatchMessage = buildPrefix(message)
+                + format("unexpected exception type thrown;", expected, actual);
+
+        // The AssertionError(String, Throwable) ctor is only available on JDK7.
+        AssertionError assertionError = new AssertionError(mismatchMessage);
+        assertionError.initCause(actualThrown);
+        throw assertionError;
     }
 
     private static String buildPrefix(String message) {

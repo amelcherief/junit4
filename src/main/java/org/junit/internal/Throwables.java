@@ -126,25 +126,29 @@ public final class Throwables {
             return false;
         }
     }
+    
+    private static List<String> readLine(BufferedReader reader) throws IOException {
+        List<String> causedByLines = new ArrayList<String>();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            if (line.startsWith("Caused by: ") || line.trim().startsWith("Suppressed: ")) {
+                causedByLines.add(line);
+                while ((line = reader.readLine()) != null) {
+                    causedByLines.add(line);
+                }
+            }
+        }
+        return causedByLines;
+    }
 
     private static List<String> getCauseStackTraceLines(Throwable exception) {
         if (exception.getCause() != null || hasSuppressed(exception)) {
             String fullTrace = getStacktrace(exception);
             BufferedReader reader = new BufferedReader(
                     new StringReader(fullTrace.substring(exception.toString().length())));
-            List<String> causedByLines = new ArrayList<String>();
     
             try {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    if (line.startsWith("Caused by: ") || line.trim().startsWith("Suppressed: ")) {
-                        causedByLines.add(line);
-                        while ((line = reader.readLine()) != null) {
-                            causedByLines.add(line);
-                        }
-                        return causedByLines;
-                    }
-                }
+                return readLine(reader);
             } catch (IOException e) {
                 // We should never get here, because we are reading from a StringReader
             }

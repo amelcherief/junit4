@@ -95,6 +95,49 @@ public abstract class BaseTestRunner implements TestListener {
         // Do nothing because it's only used to know the state of the test
     }
 
+    public boolean suiteClass(String suiteClassName, Class<?> testClass) {
+        try {
+            testClass = loadSuiteClass(suiteClassName);
+            return true;
+        } catch (ClassNotFoundException e) {
+            String clazz = e.getMessage();
+            if (clazz == null) {
+                clazz = suiteClassName;
+            }
+            runFailed("Class not found \"" + clazz + "\"");
+            return false;
+        } catch (Exception e) {
+            runFailed("Error: " + e.toString());
+            return false;
+        }
+    }
+    
+    public boolean suiteMethod(Method suiteMethod, Class<?> testClass) {
+        try {
+            suiteMethod = testClass.getMethod(SUITE_METHODNAME);
+            return true;
+        } catch (Exception e) {
+            // try to extract a test suite automatically
+            clearStatus();
+            return false;
+        }
+    }
+    
+    public boolean suiteTest(Test test, Method suiteMethod) {
+        boolean bool = false;
+        try {
+            test = (Test) suiteMethod.invoke(null); // static method
+            if (test == null) {
+                bool = true;
+            }
+        } catch (InvocationTargetException e) {
+            runFailed("Failed to invoke suite():" + e.getTargetException().toString());
+        } catch (IllegalAccessException e) {
+            runFailed("Failed to invoke suite():" + e.toString());
+        }
+        return bool;
+    }
+    
     /**
      * Returns the Test corresponding to the given suite. This is
      * a template method, subclasses override runFailed(), clearStatus().
@@ -105,47 +148,28 @@ public abstract class BaseTestRunner implements TestListener {
             return null;
         }
         Class<?> testClass = null;
-        try {
-            testClass = loadSuiteClass(suiteClassName);
-        } catch (ClassNotFoundException e) {
-            String clazz = e.getMessage();
-            if (clazz == null) {
-                clazz = suiteClassName;
-            }
-            runFailed("Class not found \"" + clazz + "\"");
-            return null;
-        } catch (Exception e) {
-            runFailed("Error: " + e.toString());
+        boolean continu = suiteClass(suiteClassName, testClass);
+        if (!continu) {
             return null;
         }
+        
         Method suiteMethod = null;
-        try {
-            suiteMethod = testClass.getMethod(SUITE_METHODNAME);
-        } catch (Exception e) {
-            // try to extract a test suite automatically
-            clearStatus();
+        boolean continu1 = suiteMethod(suiteMethod, testClass);
+        if(! continu1) {
             return new TestSuite(testClass);
         }
+        
         if (!Modifier.isStatic(suiteMethod.getModifiers())) {
             runFailed("Suite() method must be static");
             return null;
         }
         Test test = null;
-        try {
-            test = (Test) suiteMethod.invoke(null); // static method
-            if (test == null) {
-                return test;
-            }
-        } catch (InvocationTargetException e) {
-            runFailed("Failed to invoke suite():" + e.getTargetException().toString());
-            return null;
-        } catch (IllegalAccessException e) {
-            runFailed("Failed to invoke suite():" + e.toString());
-            return null;
+        boolean continu2 = suiteTest(test, suiteMethod);
+        if (!continu2) {return null;}
+        else {
+            clearStatus();
+            return test;
         }
-
-        clearStatus();
-        return test;
     }
 
     /**
